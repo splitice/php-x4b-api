@@ -1,0 +1,19 @@
+{
+	"keywords" : [
+		"x4b","api"
+	],
+	"autoload" : {
+		"psr-0" : {
+			"Splitice" : "src"
+		}
+	},
+	"name" : "splitice/php-x4b-api",
+	"type" : "library",
+	"license" : "MIT",
+	"require" : {
+		"php" : ">=5.3"
+	},
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*"
+    }
+}
