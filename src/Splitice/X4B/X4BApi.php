@@ -32,7 +32,12 @@ class X4BApi
 		return new Modules\PortApiModule($this->api, $this->auth);
 
 	}
-	public function module_acl(){
-		return new Modules\AclApiModule($this->api, $this->auth);
+
+	/**
+	 * @param string $target either http or droplist (TCP/UDP ports)
+	 * @return Modules\AclApiModule
+	 */
+	public function module_acl($target){
+		return new Modules\AclApiModule($this->api, $this->auth, $target);
 	}
 }
