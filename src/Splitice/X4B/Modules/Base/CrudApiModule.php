@@ -23,6 +23,10 @@ abstract class CrudApiModule extends ApiModuleClient
 		$data['query'] = $selector;
 		return $this->api_execute($this->module_name(), __FUNCTION__, $data);
 	}
+	function delete($selector, array $data = array()){
+		$data['query'] = $selector;
+		return $this->api_execute($this->module_name(), __FUNCTION__, $data);
+	}
 	function describe(array $data = array()){
 		return $this->api_execute($this->module_name(), __FUNCTION__, $data);
 	}
