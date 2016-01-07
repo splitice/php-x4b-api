@@ -25,12 +25,16 @@ class X4BApi
 	public function auth_login($username, $password){
 		$this->auth = new Authorization\UsernameAuthorization($username,$password);
 	}
+
 	public function auth_key(){
 		/* todo */
 	}
+
+	/**
+	 * @return Modules\PortApiModule
+	 */
 	public function module_port(){
 		return new Modules\PortApiModule($this->api, $this->auth);
-
 	}
 
 	/**
