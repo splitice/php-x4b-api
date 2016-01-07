@@ -63,7 +63,7 @@ class CrudTest extends PHPUnit_Framework_TestCase {
 
         //Assert
         $client = $this->getMock(self::API_CLIENT);
-        $client->expects($this->once())->method('execute')->with($this->equalTo('Port'),$this->equalTo('update'),$this->equalTo(array('value'=>$value)));
+        $client->expects($this->once())->method('execute')->with($this->equalTo('Port'),$this->equalTo('insert'),$this->equalTo(array('value'=>$value)));
 
         //Do
         $api = new X4BApi($client);
