@@ -6,6 +6,8 @@ use Splitice\X4B\X4BApi;
 
 class ACL
 {
+	use TCrudWrapper;
+
 	private $id;
 	/**
 	 * @var X4BApi
@@ -23,21 +25,31 @@ class ACL
 	/**
 	 * @return \Splitice\X4B\Modules\AclApiModule
 	 */
-	private function aclApi(){
+	protected function moduleApi(){
 		return $this->api->module_acl($this->target);
+	}
+	protected function moduleDataFilter($function, &$data){
+		$data['acl_type'] = $this->target;
+	}
+	protected function getApiValue(){
+		return array();
+	}
+	protected function getApiQuery(){
+		return array('id'=>$this->id);
 	}
 
 	public function moveUp(){
-		return $this->aclApi()->moveUp(array('id'=>$this->id));
+		return $this->moduleApi()->moveUp(array('id'=>$this->id));
 	}
 
 	public function moveDown(){
-		return $this->aclApi()->moveDown(array('id'=>$this->id));
+		return $this->moduleApi()->moveDown(array('id'=>$this->id));
 	}
 
 	/**
 	 * @param $id
 	 * @param X4BApi $api
+	 * @param $target
 	 * @return ACL
 	 */
 	static function fromId($id, X4BApi $api, $target){
