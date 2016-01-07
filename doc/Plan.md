@@ -6,7 +6,8 @@ Get the value of a Plan object matching a query
 
 * **URL**: https://www.x4b.net/apiv2/Plan/get
 * **URL Params**: 
-**query[id]** - int: ID of the Plan object (optional for query)
+
+    **query[id]** - int: ID of the Plan object (optional for query)
 
 * **Returns**: 
 ```
@@ -31,7 +32,8 @@ Get the value of a Plan objects matching a query
 
 * **URL**: https://www.x4b.net/apiv2/Plan/all
 * **URL Params**: 
-**query[id]** - int: ID of the Plan object (optional for query)
+
+    **query[id]** - int: ID of the Plan object (optional for query)
 
 * **Returns**: 
 ```
@@ -58,6 +60,7 @@ Provides any available description for the Plan API module
 
 * **URL**: https://www.x4b.net/apiv2/Plan/describe
 * **URL Params**: 
+
 * **Returns**: this
 * **Error Response**: 
 ```

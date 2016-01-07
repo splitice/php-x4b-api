@@ -6,31 +6,32 @@ Create a new Port object
 
 * **URL**: https://www.x4b.net/apiv2/Port/create
 * **URL Params**: 
-**value[lower]** - int: the numerical port (low) on the filter side
 
-**value[upper]** - int: the numerical port (upper) on the filter side
+    **value[lower]** - int: the numerical port (low) on the filter side
 
-**value[protocol]** - string: the protocol of the port. e.g http, ftp, tcp
+    **value[upper]** - int: the numerical port (upper) on the filter side
 
-**value[method]** - string: the backend communication method of the port. e.g tunnel, vpn, rp
+    **value[protocol]** - string: the protocol of the port. e.g http, ftp, tcp
 
-**value[server]** - int: the server ID this port applies to, can be null if applies to all servers
+    **value[method]** - string: the backend communication method of the port. e.g tunnel, vpn, rp
 
-**value[lease]** - int: The lease ID linked to
+    **value[server]** - int: the server ID this port applies to, can be null if applies to all servers
 
-**value[lb_method]** - string: the LB method (default, ip_hash, least_conn)
+    **value[lease]** - int: The lease ID linked to
 
-**value[backend_mode]** - string: the backend mode (simple, lb)
+    **value[lb_method]** - string: the LB method (default, ip_hash, least_conn)
 
-**value[type]** - string: entry type single, range or dmz
+    **value[backend_mode]** - string: the backend mode (simple, lb)
 
-**value[backend]** - object: matching the syntax of the PortBackend moduley
+    **value[type]** - string: entry type single, range or dmz
 
-**value[domain]** - string: domain name (optional) - (HTTP/HTTPS) only
+    **value[backend]** - object: matching the syntax of the PortBackend moduley
 
-**value[backend_protocol]** - string: protocol used when communicating with the backend, ssl or default - (HTTP/HTTPS) only
+    **value[domain]** - string: domain name (optional) - (HTTP/HTTPS) only
 
-**value[keepalive]** - int: maximum number of idle connections to keep open to the backend ready for new clients - (HTTP/HTTPS) only
+    **value[backend_protocol]** - string: protocol used when communicating with the backend, ssl or default - (HTTP/HTTPS) only
+
+    **value[keepalive]** - int: maximum number of idle connections to keep open to the backend ready for new clients - (HTTP/HTTPS) only
 
 * **Returns**: 
 ```
@@ -61,23 +62,24 @@ Get the value of a Port object matching a query
 
 * **URL**: https://www.x4b.net/apiv2/Port/get
 * **URL Params**: 
-**query[id]** - int: ID of the Port object
 
-**query[lower]** - int: the numerical port (low) on the filter side
+    **query[id]** - int: ID of the Port object
 
-**query[upper]** - int: the numerical port (upper) on the filter side
+    **query[lower]** - int: the numerical port (low) on the filter side
 
-**query[protocol]** - string: the protocol of the port. e.g http, ftp, tcp
+    **query[upper]** - int: the numerical port (upper) on the filter side
 
-**query[method]** - string: the backend communication method of the port. e.g tunnel, vpn, rp
+    **query[protocol]** - string: the protocol of the port. e.g http, ftp, tcp
 
-**query[server]** - int: the server ID this port applies to, can be null if applies to all servers
+    **query[method]** - string: the backend communication method of the port. e.g tunnel, vpn, rp
 
-**query[lease]** - int: The lease ID linked to
+    **query[server]** - int: the server ID this port applies to, can be null if applies to all servers
 
-**query[lb_method]** - string: the LB method (default, ip_hash, least_conn)
+    **query[lease]** - int: The lease ID linked to
 
-**query[backend_mode]** - string: the backend mode (simple, lb)
+    **query[lb_method]** - string: the LB method (default, ip_hash, least_conn)
+
+    **query[backend_mode]** - string: the backend mode (simple, lb)
 
 * **Returns**: 
 ```
@@ -110,49 +112,50 @@ Change the values in a Port object
 
 * **URL**: https://www.x4b.net/apiv2/Port/update
 * **URL Params**: 
-**query[id]** - int: ID of the Port object
 
-**query[lower]** - int: the numerical port (low) on the filter side
+    **query[id]** - int: ID of the Port object
 
-**query[upper]** - int: the numerical port (upper) on the filter side
+    **query[lower]** - int: the numerical port (low) on the filter side
 
-**query[protocol]** - string: the protocol of the port. e.g http, ftp, tcp
+    **query[upper]** - int: the numerical port (upper) on the filter side
 
-**query[method]** - string: the backend communication method of the port. e.g tunnel, vpn, rp
+    **query[protocol]** - string: the protocol of the port. e.g http, ftp, tcp
 
-**query[server]** - int: the server ID this port applies to, can be null if applies to all servers
+    **query[method]** - string: the backend communication method of the port. e.g tunnel, vpn, rp
 
-**query[lease]** - int: The lease ID linked to
+    **query[server]** - int: the server ID this port applies to, can be null if applies to all servers
 
-**query[lb_method]** - string: the LB method (default, ip_hash, least_conn)
+    **query[lease]** - int: The lease ID linked to
 
-**query[backend_mode]** - string: the backend mode (simple, lb)
+    **query[lb_method]** - string: the LB method (default, ip_hash, least_conn)
 
-**value[lower]** - int: the numerical port (low) on the filter side
+    **query[backend_mode]** - string: the backend mode (simple, lb)
 
-**value[upper]** - int: the numerical port (upper) on the filter side
+    **value[lower]** - int: the numerical port (low) on the filter side
 
-**value[protocol]** - string: the protocol of the port. e.g http, ftp, tcp
+    **value[upper]** - int: the numerical port (upper) on the filter side
 
-**value[method]** - string: the backend communication method of the port. e.g tunnel, vpn, rp
+    **value[protocol]** - string: the protocol of the port. e.g http, ftp, tcp
 
-**value[server]** - int: the server ID this port applies to, can be null if applies to all servers
+    **value[method]** - string: the backend communication method of the port. e.g tunnel, vpn, rp
 
-**value[lease]** - int: The lease ID linked to
+    **value[server]** - int: the server ID this port applies to, can be null if applies to all servers
 
-**value[lb_method]** - string: the LB method (default, ip_hash, least_conn)
+    **value[lease]** - int: The lease ID linked to
 
-**value[backend_mode]** - string: the backend mode (simple, lb)
+    **value[lb_method]** - string: the LB method (default, ip_hash, least_conn)
 
-**value[type]** - string: entry type single, range or dmz
+    **value[backend_mode]** - string: the backend mode (simple, lb)
 
-**value[backend]** - object: matching the syntax of the PortBackend moduley
+    **value[type]** - string: entry type single, range or dmz
 
-**value[domain]** - string: domain name (optional) - (HTTP/HTTPS) only
+    **value[backend]** - object: matching the syntax of the PortBackend moduley
 
-**value[backend_protocol]** - string: protocol used when communicating with the backend, ssl or default - (HTTP/HTTPS) only
+    **value[domain]** - string: domain name (optional) - (HTTP/HTTPS) only
 
-**value[keepalive]** - int: maximum number of idle connections to keep open to the backend ready for new clients - (HTTP/HTTPS) only
+    **value[backend_protocol]** - string: protocol used when communicating with the backend, ssl or default - (HTTP/HTTPS) only
+
+    **value[keepalive]** - int: maximum number of idle connections to keep open to the backend ready for new clients - (HTTP/HTTPS) only
 
 * **Returns**: 
 ```
@@ -185,23 +188,24 @@ Delete a Port object matching a query
 
 * **URL**: https://www.x4b.net/apiv2/Port/delete
 * **URL Params**: 
-**query[id]** - int: ID of the Port object
 
-**query[lower]** - int: the numerical port (low) on the filter side
+    **query[id]** - int: ID of the Port object
 
-**query[upper]** - int: the numerical port (upper) on the filter side
+    **query[lower]** - int: the numerical port (low) on the filter side
 
-**query[protocol]** - string: the protocol of the port. e.g http, ftp, tcp
+    **query[upper]** - int: the numerical port (upper) on the filter side
 
-**query[method]** - string: the backend communication method of the port. e.g tunnel, vpn, rp
+    **query[protocol]** - string: the protocol of the port. e.g http, ftp, tcp
 
-**query[server]** - int: the server ID this port applies to, can be null if applies to all servers
+    **query[method]** - string: the backend communication method of the port. e.g tunnel, vpn, rp
 
-**query[lease]** - int: The lease ID linked to
+    **query[server]** - int: the server ID this port applies to, can be null if applies to all servers
 
-**query[lb_method]** - string: the LB method (default, ip_hash, least_conn)
+    **query[lease]** - int: The lease ID linked to
 
-**query[backend_mode]** - string: the backend mode (simple, lb)
+    **query[lb_method]** - string: the LB method (default, ip_hash, least_conn)
+
+    **query[backend_mode]** - string: the backend mode (simple, lb)
 
 * **Returns**: 
 ```
@@ -220,23 +224,24 @@ Get the value of a Port objects matching a query
 
 * **URL**: https://www.x4b.net/apiv2/Port/all
 * **URL Params**: 
-**query[id]** - int: ID of the Port object
 
-**query[lower]** - int: the numerical port (low) on the filter side
+    **query[id]** - int: ID of the Port object
 
-**query[upper]** - int: the numerical port (upper) on the filter side
+    **query[lower]** - int: the numerical port (low) on the filter side
 
-**query[protocol]** - string: the protocol of the port. e.g http, ftp, tcp
+    **query[upper]** - int: the numerical port (upper) on the filter side
 
-**query[method]** - string: the backend communication method of the port. e.g tunnel, vpn, rp
+    **query[protocol]** - string: the protocol of the port. e.g http, ftp, tcp
 
-**query[server]** - int: the server ID this port applies to, can be null if applies to all servers
+    **query[method]** - string: the backend communication method of the port. e.g tunnel, vpn, rp
 
-**query[lease]** - int: The lease ID linked to
+    **query[server]** - int: the server ID this port applies to, can be null if applies to all servers
 
-**query[lb_method]** - string: the LB method (default, ip_hash, least_conn)
+    **query[lease]** - int: The lease ID linked to
 
-**query[backend_mode]** - string: the backend mode (simple, lb)
+    **query[lb_method]** - string: the LB method (default, ip_hash, least_conn)
+
+    **query[backend_mode]** - string: the backend mode (simple, lb)
 
 * **Returns**: 
 ```
@@ -271,6 +276,7 @@ Provides any available description for the Port API module
 
 * **URL**: https://www.x4b.net/apiv2/Port/describe
 * **URL Params**: 
+
 * **Returns**: this
 * **Error Response**: 
 ```

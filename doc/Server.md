@@ -6,7 +6,8 @@ Get the value of a Server object matching a query
 
 * **URL**: https://www.x4b.net/apiv2/Server/get
 * **URL Params**: 
-**query[id]** - int: ID of the Server object (optional for query)
+
+    **query[id]** - int: ID of the Server object (optional for query)
 
 * **Returns**: 
 ```
@@ -26,7 +27,8 @@ Get the value of a Server objects matching a query
 
 * **URL**: https://www.x4b.net/apiv2/Server/all
 * **URL Params**: 
-**query[id]** - int: ID of the Server object (optional for query)
+
+    **query[id]** - int: ID of the Server object (optional for query)
 
 * **Returns**: 
 ```
@@ -48,6 +50,7 @@ Provides any available description for the Server API module
 
 * **URL**: https://www.x4b.net/apiv2/Server/describe
 * **URL Params**: 
+
 * **Returns**: this
 * **Error Response**: 
 ```
