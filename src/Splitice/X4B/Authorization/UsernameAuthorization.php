@@ -7,20 +7,20 @@ use Splitice\X4B\Exceptions\ApiAuthorizationException;
 
 class UsernameAuthorization implements IX4BApiAuthorization
 {
-	private $username;
+	private $email;
 	private $password;
 	private $logged_in = false;
 
-	function __construct($username, $password)
+	function __construct($email, $password)
 	{
-		$this->username = $username;
+		$this->email = $email;
 		$this->password = $password;
 	}
 
 	public function perform(IX4BApiClient $api, &$data)
 	{
 		if(!$this->logged_in) {
-			$resp = $api->execute('User','login',array('username'=>$this->username,'password'=>$this->password));
+			$resp = $api->execute('User','login',array('email'=>$this->email,'password'=>$this->password));
 			if(!$resp || $resp['status'] != 'ok'){
 				throw new ApiAuthorizationException();
 			}
