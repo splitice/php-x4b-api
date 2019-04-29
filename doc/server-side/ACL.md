@@ -1,7 +1,7 @@
 ACL API Module
 ---
 
-## moveDown
+## ACL::**moveDown**
 Move a ACL down the list (order). HTTP Only.
 
 * **URL**: https://www.x4b.net/apiv2/ACL/moveDown
@@ -38,7 +38,7 @@ Move a ACL down the list (order). HTTP Only.
     "error": "Error Message"
 }
 ```
-## moveUp
+## ACL::**moveUp**
 Move a ACL up the list (order). HTTP Only.
 
 * **URL**: https://www.x4b.net/apiv2/ACL/moveUp
@@ -75,7 +75,10 @@ Move a ACL up the list (order). HTTP Only.
     "error": "Error Message"
 }
 ```
-## create
+## ACL::**bulk**
+method not documented
+
+## ACL::**create**
 Create a new ACL object
 
 * **URL**: https://www.x4b.net/apiv2/ACL/create
@@ -105,7 +108,7 @@ Create a new ACL object
     "error": "Error Message"
 }
 ```
-## insert
+## ACL::**insert**
 Synonym for Create
 
 * **URL**: https://www.x4b.net/apiv2/ACL/insert
@@ -117,7 +120,7 @@ Synonym for Create
     "error": "Error Message"
 }
 ```
-## get
+## ACL::**get**
 Get the value of a ACL object matching a query
 
 * **URL**: https://www.x4b.net/apiv2/ACL/get
@@ -154,7 +157,7 @@ Get the value of a ACL object matching a query
     "error": "Error Message"
 }
 ```
-## update
+## ACL::**update**
 Change the values in a ACL object
 
 * **URL**: https://www.x4b.net/apiv2/ACL/update
@@ -201,7 +204,7 @@ Change the values in a ACL object
     "error": "Error Message"
 }
 ```
-## delete
+## ACL::**delete**
 Delete a ACL object matching a query
 
 * **URL**: https://www.x4b.net/apiv2/ACL/delete
@@ -233,7 +236,7 @@ Delete a ACL object matching a query
     "error": "Error Message"
 }
 ```
-## all
+## ACL::**all**
 Get the value of a ACL objects matching a query
 
 * **URL**: https://www.x4b.net/apiv2/ACL/all
@@ -250,6 +253,8 @@ Get the value of a ACL objects matching a query
     **query[fw]** - int: The firewall profile ID linked to
 
     **query[port]** - int: The port ID linked to
+
+    **page** - optional structure with "start" and "limit" members to page the output
 
     **acl_type** - string: The type of ACL, either droplist (TCP/UDP/etc) or http (HTTP/HTTPS). Not required if a port is specified in either value or query.
 
@@ -272,7 +277,7 @@ Get the value of a ACL objects matching a query
     "error": "Error Message"
 }
 ```
-## describe
+## ACL::**describe**
 Provides any available description for the ACL API module
 
 * **URL**: https://www.x4b.net/apiv2/ACL/describe

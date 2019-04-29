@@ -1,7 +1,10 @@
 PortBackend API Module
 ---
 
-## create
+## PortBackend::**bulk**
+method not documented
+
+## PortBackend::**create**
 Create a new PortBackend object
 
 * **URL**: https://www.x4b.net/apiv2/PortBackend/create
@@ -23,7 +26,7 @@ Create a new PortBackend object
     "error": "Error Message"
 }
 ```
-## insert
+## PortBackend::**insert**
 Synonym for Create
 
 * **URL**: https://www.x4b.net/apiv2/PortBackend/insert
@@ -35,7 +38,7 @@ Synonym for Create
     "error": "Error Message"
 }
 ```
-## get
+## PortBackend::**get**
 Get the value of a PortBackend object matching a query
 
 * **URL**: https://www.x4b.net/apiv2/PortBackend/get
@@ -44,6 +47,8 @@ Get the value of a PortBackend object matching a query
     **query[id]** - int: ID of the Port Backend object
 
     **query[port]** - string: the port this backend belongs to
+
+    **query[to]** - not documented
 
 * **Returns**: 
 ```
@@ -59,7 +64,7 @@ Get the value of a PortBackend object matching a query
     "error": "Error Message"
 }
 ```
-## update
+## PortBackend::**update**
 Change the values in a PortBackend object
 
 * **URL**: https://www.x4b.net/apiv2/PortBackend/update
@@ -68,6 +73,8 @@ Change the values in a PortBackend object
     **query[id]** - int: ID of the Port Backend object
 
     **query[port]** - string: the port this backend belongs to
+
+    **query[to]** - not documented
 
     **value[port]** - string: the port this backend belongs to
 
@@ -87,7 +94,7 @@ Change the values in a PortBackend object
     "error": "Error Message"
 }
 ```
-## delete
+## PortBackend::**delete**
 Delete a PortBackend object matching a query
 
 * **URL**: https://www.x4b.net/apiv2/PortBackend/delete
@@ -96,6 +103,8 @@ Delete a PortBackend object matching a query
     **query[id]** - int: ID of the Port Backend object
 
     **query[port]** - string: the port this backend belongs to
+
+    **query[to]** - not documented
 
 * **Returns**: 
 ```
@@ -109,7 +118,7 @@ Delete a PortBackend object matching a query
     "error": "Error Message"
 }
 ```
-## all
+## PortBackend::**all**
 Get the value of a PortBackend objects matching a query
 
 * **URL**: https://www.x4b.net/apiv2/PortBackend/all
@@ -118,6 +127,10 @@ Get the value of a PortBackend objects matching a query
     **query[id]** - int: ID of the Port Backend object
 
     **query[port]** - string: the port this backend belongs to
+
+    **query[to]** - not documented
+
+    **page** - optional structure with "start" and "limit" members to page the output
 
 * **Returns**: 
 ```
@@ -135,7 +148,7 @@ Get the value of a PortBackend objects matching a query
     "error": "Error Message"
 }
 ```
-## describe
+## PortBackend::**describe**
 Provides any available description for the PortBackend API module
 
 * **URL**: https://www.x4b.net/apiv2/PortBackend/describe

@@ -1,7 +1,10 @@
 Plan API Module
 ---
 
-## get
+## Plan::**bulk**
+method not documented
+
+## Plan::**get**
 Get the value of a Plan object matching a query
 
 * **URL**: https://www.x4b.net/apiv2/Plan/get
@@ -27,13 +30,15 @@ Get the value of a Plan object matching a query
     "error": "Error Message"
 }
 ```
-## all
+## Plan::**all**
 Get the value of a Plan objects matching a query
 
 * **URL**: https://www.x4b.net/apiv2/Plan/all
 * **URL Params**: 
 
     **query[id]** - int: ID of the Plan object (optional for query)
+
+    **page** - optional structure with "start" and "limit" members to page the output
 
 * **Returns**: 
 ```
@@ -55,7 +60,7 @@ Get the value of a Plan objects matching a query
     "error": "Error Message"
 }
 ```
-## describe
+## Plan::**describe**
 Provides any available description for the Plan API module
 
 * **URL**: https://www.x4b.net/apiv2/Plan/describe
