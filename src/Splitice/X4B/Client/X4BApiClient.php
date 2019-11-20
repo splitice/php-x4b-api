@@ -24,6 +24,8 @@ class X4BApiClient implements IX4BApiClient
         curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($this->ch, CURLOPT_HEADER, 0);
         curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($this->ch, CURLOPT_AUTOREFERER, true);
+        curl_setopt($this->ch, CURLOPT_USERAGENT, "x4b-api-client");
     }
 
     private function build_url($module, $method){
