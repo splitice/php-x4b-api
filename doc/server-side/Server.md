@@ -1,7 +1,10 @@
 Server API Module
 ---
 
-## get
+## Server::**bulk**
+method not documented
+
+## Server::**get**
 Get the value of a Server object matching a query
 
 * **URL**: https://www.x4b.net/apiv2/Server/get
@@ -22,13 +25,15 @@ Get the value of a Server object matching a query
     "error": "Error Message"
 }
 ```
-## all
+## Server::**all**
 Get the value of a Server objects matching a query
 
 * **URL**: https://www.x4b.net/apiv2/Server/all
 * **URL Params**: 
 
     **query[id]** - int: ID of the Server object (optional for query)
+
+    **page** - optional structure with "start" and "limit" members to page the output
 
 * **Returns**: 
 ```
@@ -45,7 +50,7 @@ Get the value of a Server objects matching a query
     "error": "Error Message"
 }
 ```
-## describe
+## Server::**describe**
 Provides any available description for the Server API module
 
 * **URL**: https://www.x4b.net/apiv2/Server/describe

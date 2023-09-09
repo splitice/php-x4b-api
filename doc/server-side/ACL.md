@@ -19,8 +19,6 @@ Move a ACL down the list (order). HTTP Only.
 
     **query[fw]** - int: The firewall profile ID linked to
 
-    **query[port]** - int: The port ID linked to
-
 * **Returns**: 
 ```
 {
@@ -28,8 +26,7 @@ Move a ACL down the list (order). HTTP Only.
     "mask": "string: Mask (CIDR) of the ACL object",
     "type": "string: Type (allow\/deny) of the ACL object. acl_type HTTP Only",
     "order": "int: Numerical order value (optional)",
-    "fw": "int: The firewall profile ID linked to",
-    "port": "int: The port ID linked to"
+    "fw": "int: The firewall profile ID linked to"
 }
 ```
 * **Error Response**: 
@@ -56,8 +53,6 @@ Move a ACL up the list (order). HTTP Only.
 
     **query[fw]** - int: The firewall profile ID linked to
 
-    **query[port]** - int: The port ID linked to
-
 * **Returns**: 
 ```
 {
@@ -65,8 +60,7 @@ Move a ACL up the list (order). HTTP Only.
     "mask": "string: Mask (CIDR) of the ACL object",
     "type": "string: Type (allow\/deny) of the ACL object. acl_type HTTP Only",
     "order": "int: Numerical order value (optional)",
-    "fw": "int: The firewall profile ID linked to",
-    "port": "int: The port ID linked to"
+    "fw": "int: The firewall profile ID linked to"
 }
 ```
 * **Error Response**: 
@@ -78,6 +72,18 @@ Move a ACL up the list (order). HTTP Only.
 ## ACL::**bulk**
 method not documented
 
+## ACL::**insert**
+Synonym for Create
+
+* **URL**: https://www.x4b.net/apiv2/ACL/insert
+* **URL Params**: see create
+* **Returns**: see create
+* **Error Response**: 
+```
+{
+    "error": "Error Message"
+}
+```
 ## ACL::**create**
 Create a new ACL object
 
@@ -92,8 +98,6 @@ Create a new ACL object
 
     **value[fw]** - int: The firewall profile ID linked to
 
-    **value[port]** - int: The port ID linked to
-
     **acl_type** - string: The type of ACL, either droplist (TCP/UDP/etc) or http (HTTP/HTTPS). Not required if a port is specified in either value or query.
 
 * **Returns**: 
@@ -102,18 +106,6 @@ Create a new ACL object
     "status": "ok"
 }
 ```
-* **Error Response**: 
-```
-{
-    "error": "Error Message"
-}
-```
-## ACL::**insert**
-Synonym for Create
-
-* **URL**: https://www.x4b.net/apiv2/ACL/insert
-* **URL Params**: see create
-* **Returns**: see create
 * **Error Response**: 
 ```
 {
@@ -136,8 +128,6 @@ Get the value of a ACL object matching a query
 
     **query[fw]** - int: The firewall profile ID linked to
 
-    **query[port]** - int: The port ID linked to
-
     **acl_type** - string: The type of ACL, either droplist (TCP/UDP/etc) or http (HTTP/HTTPS). Not required if a port is specified in either value or query.
 
 * **Returns**: 
@@ -147,8 +137,7 @@ Get the value of a ACL object matching a query
     "mask": "string: Mask (CIDR) of the ACL object",
     "type": "string: Type (allow\/deny) of the ACL object. acl_type HTTP Only",
     "order": "int: Numerical order value (optional)",
-    "fw": "int: The firewall profile ID linked to",
-    "port": "int: The port ID linked to"
+    "fw": "int: The firewall profile ID linked to"
 }
 ```
 * **Error Response**: 
@@ -173,8 +162,6 @@ Change the values in a ACL object
 
     **query[fw]** - int: The firewall profile ID linked to
 
-    **query[port]** - int: The port ID linked to
-
     **value[mask]** - string: Mask (CIDR) of the ACL object
 
     **value[type]** - string: Type (allow/deny) of the ACL object. acl_type HTTP Only
@@ -182,8 +169,6 @@ Change the values in a ACL object
     **value[order]** - int: Numerical order value (optional)
 
     **value[fw]** - int: The firewall profile ID linked to
-
-    **value[port]** - int: The port ID linked to
 
     **acl_type** - string: The type of ACL, either droplist (TCP/UDP/etc) or http (HTTP/HTTPS). Not required if a port is specified in either value or query.
 
@@ -194,8 +179,7 @@ Change the values in a ACL object
     "mask": "string: Mask (CIDR) of the ACL object",
     "type": "string: Type (allow\/deny) of the ACL object. acl_type HTTP Only",
     "order": "int: Numerical order value (optional)",
-    "fw": "int: The firewall profile ID linked to",
-    "port": "int: The port ID linked to"
+    "fw": "int: The firewall profile ID linked to"
 }
 ```
 * **Error Response**: 
@@ -219,8 +203,6 @@ Delete a ACL object matching a query
     **query[order]** - int: Numerical order value (optional)
 
     **query[fw]** - int: The firewall profile ID linked to
-
-    **query[port]** - int: The port ID linked to
 
     **acl_type** - string: The type of ACL, either droplist (TCP/UDP/etc) or http (HTTP/HTTPS). Not required if a port is specified in either value or query.
 
@@ -252,8 +234,6 @@ Get the value of a ACL objects matching a query
 
     **query[fw]** - int: The firewall profile ID linked to
 
-    **query[port]** - int: The port ID linked to
-
     **page** - optional structure with "start" and "limit" members to page the output
 
     **acl_type** - string: The type of ACL, either droplist (TCP/UDP/etc) or http (HTTP/HTTPS). Not required if a port is specified in either value or query.
@@ -266,8 +246,7 @@ Get the value of a ACL objects matching a query
         "mask": "string: Mask (CIDR) of the ACL object",
         "type": "string: Type (allow\/deny) of the ACL object. acl_type HTTP Only",
         "order": "int: Numerical order value (optional)",
-        "fw": "int: The firewall profile ID linked to",
-        "port": "int: The port ID linked to"
+        "fw": "int: The firewall profile ID linked to"
     }
 ]
 ```

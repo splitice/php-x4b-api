@@ -4,6 +4,18 @@ PortBackend API Module
 ## PortBackend::**bulk**
 method not documented
 
+## PortBackend::**insert**
+Synonym for Create
+
+* **URL**: https://www.x4b.net/apiv2/PortBackend/insert
+* **URL Params**: see create
+* **Returns**: see create
+* **Error Response**: 
+```
+{
+    "error": "Error Message"
+}
+```
 ## PortBackend::**create**
 Create a new PortBackend object
 
@@ -20,18 +32,6 @@ Create a new PortBackend object
     "status": "ok"
 }
 ```
-* **Error Response**: 
-```
-{
-    "error": "Error Message"
-}
-```
-## PortBackend::**insert**
-Synonym for Create
-
-* **URL**: https://www.x4b.net/apiv2/PortBackend/insert
-* **URL Params**: see create
-* **Returns**: see create
 * **Error Response**: 
 ```
 {
