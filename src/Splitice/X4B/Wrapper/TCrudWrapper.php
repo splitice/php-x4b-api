@@ -31,7 +31,7 @@ trait TCrudWrapper
     {
         $this->moduleDataFilter($data);
 
-        return $this->moduleApi()->insert($this->getApiValue(), $data);
+        return $this->moduleApi()->create($this->getApiValue(), $data);
     }
 
     /**

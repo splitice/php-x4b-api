@@ -32,6 +32,7 @@ class X4BApiClient implements IX4BApiClient
         curl_setopt($this->ch, CURLOPT_HEADER, false);
         curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($this->ch, CURLOPT_AUTOREFERER, true);
+        curl_setopt($this->ch, CURLOPT_COOKIEFILE, '');
         curl_setopt($this->ch, CURLOPT_USERAGENT, 'x4b-api-client');
     }
 
@@ -67,6 +68,11 @@ class X4BApiClient implements IX4BApiClient
             throw new ApiTransportException(0, 'Unexpected non-string response from cURL.');
         }
 
-        return json_decode($response, true);
+        $decoded = json_decode($response, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new ApiTransportException(0, 'Malformed JSON response from API: ' . json_last_error_msg());
+        }
+
+        return $decoded;
     }
 }

@@ -2,78 +2,54 @@
 
 namespace Splitice\X4B\Modules\Base;
 
-abstract class CrudApiModule extends ApiModuleClient
+abstract class CrudApiModule extends QueryApiModule
 {
-    abstract protected function module_name(): string;
-
     /**
-     * @param array<string, mixed> $selector
+     * Create a new record.
+     *
+     * @param array<string, mixed> $value Record values.
      * @param array<string, mixed> $data
      * @return mixed
      */
-    public function all(array $selector, array $data = []): mixed
+    public function create(array $value, array $data = []): mixed
     {
-        $data['query'] = $selector;
-
-        return $this->api_execute($this->module_name(), __FUNCTION__, $data);
+        return $this->api_execute_value(__FUNCTION__, $value, $data);
     }
 
     /**
-     * @param array<string, mixed> $value
-     * @param array<string, mixed> $data
-     * @return mixed
-     */
-    public function insert(array $value, array $data = []): mixed
-    {
-        $data['value'] = $value;
-
-        return $this->api_execute($this->module_name(), __FUNCTION__, $data);
-    }
-
-    /**
-     * @param array<string, mixed> $selector
-     * @param array<string, mixed> $value
+     * Update an existing record.
+     *
+     * @param array<string, mixed> $selector Query selector.
+     * @param array<string, mixed> $value Updated values.
      * @param array<string, mixed> $data
      * @return mixed
      */
     public function update(array $selector, array $value, array $data = []): mixed
     {
-        $data['query'] = $selector;
-        $data['value'] = $value;
-
-        return $this->api_execute($this->module_name(), __FUNCTION__, $data);
+        return $this->api_execute_query_value(__FUNCTION__, $selector, $value, $data);
     }
 
     /**
-     * @param array<string, mixed> $selector
-     * @param array<string, mixed> $data
-     * @return mixed
-     */
-    public function get(array $selector, array $data = []): mixed
-    {
-        $data['query'] = $selector;
-
-        return $this->api_execute($this->module_name(), __FUNCTION__, $data);
-    }
-
-    /**
-     * @param array<string, mixed> $selector
+     * Delete a record.
+     *
+     * @param array<string, mixed> $selector Query selector.
      * @param array<string, mixed> $data
      * @return mixed
      */
     public function delete(array $selector, array $data = []): mixed
     {
-        $data['query'] = $selector;
-
-        return $this->api_execute($this->module_name(), __FUNCTION__, $data);
+        return $this->api_execute_query(__FUNCTION__, $selector, $data);
     }
 
     /**
-     * @param array<string, mixed> $data
+     * Execute a bulk create/update request.
+     *
+     * @param array<int|string, array<string, mixed>> $rows Bulk rows keyed by identifier.
+     * @param array<string, mixed> $data Additional request payload.
      * @return mixed
      */
-    public function describe(array $data = []): mixed
+    public function bulk(array $rows, array $data = []): mixed
     {
-        return $this->api_execute($this->module_name(), __FUNCTION__, $data);
+        return $this->api_execute_bulk($rows, $data);
     }
 }
