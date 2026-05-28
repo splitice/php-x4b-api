@@ -26,16 +26,16 @@ final class X4BApiClientTransportTest extends TestCase
     {
         $client = new X4BApiClient($this->startServer()->getApiBaseUrl());
 
-        $response = $client->execute('Lease', 'all', [
+        $response = $this->normalizeTransportResponse($client->execute('Lease', 'all', [
             'lease' => 42,
             'mode' => 'test',
-        ]);
+        ]));
 
         self::assertSame('/apiv2/Lease/all', $response['path']);
         self::assertSame('POST', $response['method']);
         self::assertSame('42', $response['post']['lease']);
         self::assertSame('test', $response['post']['mode']);
-        self::assertStringContainsString('multipart/form-data', (string)$response['content_type']);
+        self::assertStringContainsString('multipart/form-data', $response['content_type']);
     }
 
     /**
@@ -45,11 +45,11 @@ final class X4BApiClientTransportTest extends TestCase
     {
         $client = new X4BApiClient($this->startServer()->getApiBaseUrl());
 
-        $login = $client->execute('User', 'login', [
+        $login = $this->normalizeTransportResponse($client->execute('User', 'login', [
             'email' => 'user@example.test',
             'password' => 'secret',
-        ]);
-        $response = $client->execute('Lease', 'all', ['lease' => 42]);
+        ]));
+        $response = $this->normalizeTransportResponse($client->execute('Lease', 'all', ['lease' => 42]));
 
         self::assertSame(1, $login['hit']);
         self::assertSame(2, $response['request_count']);
@@ -94,7 +94,7 @@ final class X4BApiClientTransportTest extends TestCase
     public function testExecuteThrowsOnCurlFailure(): void
     {
         $unusedPort = $this->findUnusedPort();
-        $client = new X4BApiClient('http://127.0.0.1:' . $unusedPort . '/apiv2');
+        $client = new X4BApiClient($this->apiBaseUrlForPort($unusedPort));
 
         try {
             $client->execute('Lease', 'all', ['lease' => 42]);
@@ -136,6 +136,77 @@ final class X4BApiClientTransportTest extends TestCase
         }
 
         return (int)substr($name, strrpos($name, ':') + 1);
+    }
+
+    /**
+     * @return non-empty-string
+     */
+    private function apiBaseUrlForPort(int $port): string
+    {
+        return sprintf('http://127.0.0.1:%d/apiv2', $port);
+    }
+
+    /**
+     * @param mixed $response
+     * @return array{
+     *     path: string,
+     *     method: string,
+     *     post: array<string, string>,
+     *     content_type: string,
+     *     cookies: array<string, string>,
+     *     hit: int,
+     *     request_count: int
+     * }
+     */
+    private function normalizeTransportResponse(mixed $response): array
+    {
+        if (!is_array($response)) {
+            self::fail('Transport response must decode to an array.');
+        }
+
+        return [
+            'path' => $this->scalarToString($response['path'] ?? ''),
+            'method' => $this->scalarToString($response['method'] ?? ''),
+            'post' => $this->normalizeStringMap($response['post'] ?? []),
+            'content_type' => $this->scalarToString($response['content_type'] ?? ''),
+            'cookies' => $this->normalizeStringMap($response['cookies'] ?? []),
+            'hit' => $this->scalarToInt($response['hit'] ?? 0),
+            'request_count' => $this->scalarToInt($response['request_count'] ?? 0),
+        ];
+    }
+
+    /**
+     * @param mixed $value
+     * @return array<string, string>
+     */
+    private function normalizeStringMap(mixed $value): array
+    {
+        if (!is_array($value)) {
+            return [];
+        }
+
+        $normalized = [];
+        foreach ($value as $key => $item) {
+            if (is_string($key) && is_scalar($item)) {
+                $normalized[$key] = (string) $item;
+            }
+        }
+
+        return $normalized;
+    }
+
+    private function scalarToString(mixed $value): string
+    {
+        return is_scalar($value) ? (string) $value : '';
+    }
+
+    private function scalarToInt(mixed $value): int
+    {
+        if (is_int($value)) {
+            return $value;
+        }
+
+        return is_numeric($value) ? (int) $value : 0;
     }
 }
 
@@ -183,18 +254,20 @@ final class LocalTransportStubServer
             2 => ['file', 'php://temp', 'w+'],
         ];
 
-        $this->process = proc_open(
+        $process = proc_open(
             $command,
             $descriptors,
             $pipes,
             dirname($this->routerPath),
-            ['X4B_API_STUB_STATE_PATH' => $this->statePath] + $_ENV
+            $this->serverEnvironment()
         );
 
-        if (!is_resource($this->process)) {
+        if (!is_resource($process)) {
             $this->process = null;
             throw new RuntimeException('Unable to start the local transport stub server.');
         }
+
+        $this->process = $process;
 
         $deadline = microtime(true) + 5.0;
         while (microtime(true) < $deadline) {
@@ -231,6 +304,8 @@ final class LocalTransportStubServer
 
     /**
      * Return the API base URL exposed by the stub server.
+     *
+     * @return non-empty-string
      */
     public function getApiBaseUrl(): string
     {
@@ -238,7 +313,7 @@ final class LocalTransportStubServer
             throw new RuntimeException('The local transport stub server has not been started.');
         }
 
-        return 'http://127.0.0.1:' . $this->port . '/apiv2';
+        return sprintf('http://127.0.0.1:%d/apiv2', $this->port);
     }
 
     /**
@@ -259,5 +334,20 @@ final class LocalTransportStubServer
         }
 
         return (int)substr($name, strrpos($name, ':') + 1);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function serverEnvironment(): array
+    {
+        $env = ['X4B_API_STUB_STATE_PATH' => $this->statePath];
+        foreach ($_ENV as $key => $value) {
+            if (is_string($key)) {
+                $env[$key] = $value;
+            }
+        }
+
+        return $env;
     }
 }

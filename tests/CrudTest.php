@@ -33,6 +33,7 @@ final class CrudTest extends TestCase
 
             foreach ($moduleSpec['methods'] as $methodSpec) {
                 $result = $module->{$methodSpec['name']}(...$methodSpec['args']);
+                self::assertIsArray($result);
                 self::assertSame($moduleSpec['module'], $result['module']);
                 self::assertSame($methodSpec['name'], $result['action']);
                 self::assertSame($methodSpec['expected_data'], $result['data']);
@@ -64,7 +65,8 @@ final class CrudTest extends TestCase
     /**
      * Build the explicit Swagger module surface matrix.
      *
-     * @return array<int, array{
+     * @return array<int, array<string, mixed>>
+     * @phpstan-return array<int, array{
      *     accessor: string,
      *     accessor_args: list<mixed>,
      *     class: class-string,
@@ -239,6 +241,7 @@ final class CrudTest extends TestCase
                     ['name' => 'group', 'args' => [['id' => 7], ['target' => 8]], 'expected_data' => ['query' => ['id' => 7], 'value' => ['target' => 8]]],
                     ['name' => 'retry', 'args' => [['id' => 7]], 'expected_data' => ['query' => ['id' => 7]]],
                     ['name' => 'renew', 'args' => [['id' => 7]], 'expected_data' => ['query' => ['id' => 7]]],
+                    ['name' => 'setPrimary', 'args' => [['id' => 7]], 'expected_data' => ['query' => ['id' => 7]]],
                     ['name' => 'ungroup', 'args' => [['id' => 7]], 'expected_data' => ['query' => ['id' => 7]]],
                 ]),
             ],
@@ -311,7 +314,8 @@ final class CrudTest extends TestCase
     /**
      * Build the standard query-method expectation set.
      *
-     * @return list<array{name: string, args: list<mixed>, expected_data: array<string, mixed>}>
+     * @return array<int, array<string, mixed>>
+     * @phpstan-return list<array{name: string, args: list<mixed>, expected_data: array<string, mixed>}>
      */
     private function queryMethods(): array
     {
@@ -326,7 +330,8 @@ final class CrudTest extends TestCase
      * Build the standard CRUD-method expectation set.
      *
      * @param array<int|string, array<string, mixed>> $bulkRows Bulk rows fixture.
-     * @return list<array{name: string, args: list<mixed>, expected_data: array<string, mixed>}>
+     * @return array<int, array<string, mixed>>
+     * @phpstan-return list<array{name: string, args: list<mixed>, expected_data: array<string, mixed>}>
      */
     private function crudMethods(array $bulkRows): array
     {
@@ -344,7 +349,8 @@ final class CrudTest extends TestCase
     /**
      * Build the TaskRequest-specific method expectation set.
      *
-     * @return list<array{name: string, args: list<mixed>, expected_data: array<string, mixed>}>
+     * @return array<int, array<string, mixed>>
+     * @phpstan-return list<array{name: string, args: list<mixed>, expected_data: array<string, mixed>}>
      */
     private function taskRequestMethods(): array
     {

@@ -19,10 +19,11 @@ class ApiKeyAuthorization implements IX4BApiAuthorization
     /**
      * Inject the API key into the request payload.
      *
-     * @param IX4BApiClient $api API transport client.
+     * @param IX4BApiClient $_api API transport client.
      * @param array<string, mixed> $data Mutable request payload.
+     * @phan-suppress PhanUnusedPublicMethodParameter
      */
-    public function perform(IX4BApiClient $api, array &$data): void
+    public function perform(IX4BApiClient $_api, array &$data): void
     {
         $data['API_KEY'] = $this->api_key;
     }
