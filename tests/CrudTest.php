@@ -1,72 +1,74 @@
 <?php
+
+use PHPUnit\Framework\TestCase;
+use Splitice\X4B\Client\IX4BApiClient;
 use Splitice\X4B\X4BApi;
 
-class CrudTest extends PHPUnit_Framework_TestCase {
-    const API_CLIENT = '\\Splitice\\X4B\\Client\\IX4BApiClient';
+final class CrudTest extends TestCase
+{
+    public function testAll(): void
+    {
+        $selector = ['lease' => 1];
 
-    function testAll(){
-        //Setup
-        $selector = array('lease'=>1);
+        $client = $this->createMock(IX4BApiClient::class);
+        $client->expects($this->once())
+            ->method('execute')
+            ->with('Port', 'all', ['query' => $selector]);
 
-        //Assert
-        $client = $this->getMock(self::API_CLIENT);
-        $client->expects($this->once())->method('execute')->with($this->equalTo('Port'),$this->equalTo('all'),$this->equalTo(array('query'=>$selector)));
-
-        //Do
         $api = new X4BApi($client);
         $api->module_port()->all($selector);
     }
 
-    function testGet(){
-        //Setup
-        $selector = array('lease'=>1);
+    public function testGet(): void
+    {
+        $selector = ['lease' => 1];
 
-        //Assert
-        $client = $this->getMock(self::API_CLIENT);
-        $client->expects($this->once())->method('execute')->with($this->equalTo('Port'),$this->equalTo('get'),$this->equalTo(array('query'=>$selector)));
+        $client = $this->createMock(IX4BApiClient::class);
+        $client->expects($this->once())
+            ->method('execute')
+            ->with('Port', 'get', ['query' => $selector]);
 
-        //Do
         $api = new X4BApi($client);
         $api->module_port()->get($selector);
     }
 
-    function testDelete(){
-        //Setup
-        $selector = array('lease'=>1);
+    public function testDelete(): void
+    {
+        $selector = ['lease' => 1];
 
-        //Assert
-        $client = $this->getMock(self::API_CLIENT);
-        $client->expects($this->once())->method('execute')->with($this->equalTo('Port'),$this->equalTo('delete'),$this->equalTo(array('query'=>$selector)));
+        $client = $this->createMock(IX4BApiClient::class);
+        $client->expects($this->once())
+            ->method('execute')
+            ->with('Port', 'delete', ['query' => $selector]);
 
-        //Do
         $api = new X4BApi($client);
         $api->module_port()->delete($selector);
     }
 
-    function testUpdate(){
-        //Setup
-        $selector = array('lease'=>1);
-        $value = array('protocol'=>1);
+    public function testUpdate(): void
+    {
+        $selector = ['lease' => 1];
+        $value = ['protocol' => 1];
 
-        //Assert
-        $client = $this->getMock(self::API_CLIENT);
-        $client->expects($this->once())->method('execute')->with($this->equalTo('Port'),$this->equalTo('update'),$this->equalTo(array('query'=>$selector,'value'=>$value)));
+        $client = $this->createMock(IX4BApiClient::class);
+        $client->expects($this->once())
+            ->method('execute')
+            ->with('Port', 'update', ['query' => $selector, 'value' => $value]);
 
-        //Do
         $api = new X4BApi($client);
         $api->module_port()->update($selector, $value);
     }
 
-    function testInsert(){
-        //Setup
-        $value = array('protocol'=>1);//not complete
+    public function testInsert(): void
+    {
+        $value = ['protocol' => 1];
 
-        //Assert
-        $client = $this->getMock(self::API_CLIENT);
-        $client->expects($this->once())->method('execute')->with($this->equalTo('Port'),$this->equalTo('insert'),$this->equalTo(array('value'=>$value)));
+        $client = $this->createMock(IX4BApiClient::class);
+        $client->expects($this->once())
+            ->method('execute')
+            ->with('Port', 'insert', ['value' => $value]);
 
-        //Do
         $api = new X4BApi($client);
         $api->module_port()->insert($value);
     }
-} 
+}

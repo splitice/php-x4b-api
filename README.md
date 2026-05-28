@@ -1,4 +1,9 @@
 # php-x4b-api
-A PHP interface to the X4B.NET API (APIv2)
 
-This is a Work In Progress that hopefully one day will get continued.
+PHP client library for the X4B.NET API v2.
+
+## Development
+
+- PHP 8.2 or newer
+- `composer install`
+- `composer ci`

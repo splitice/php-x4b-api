@@ -1,41 +1,55 @@
 <?php
-namespace Splitice\X4B\Wrapper;
 
+namespace Splitice\X4B\Wrapper;
 
 use Splitice\X4B\X4BApi;
 
 class Lease
 {
-	private $id;
-	/**
-	 * @var X4BApi
-	 */
-	private $api;
+    private int|string $id;
 
-	public function __construct($fields, X4BApi $api)
-	{
-		$this->id = $fields['id'];
-		$this->api = $api;
-	}
+    private X4BApi $api;
 
-	/**
-	 * @return Port[]
-	 */
-	public function getPorts(){
-		$ret = array();
-		$port = $this->api->module_port();
-		foreach($port->all(array('lease'=>$this->id)) as $port){
-			$ret[] = new Port($port, $this->api);
-		}
-		return $ret;
-	}
+    /**
+     * @param array{id: int|string} $fields
+     */
+    public function __construct(array $fields, X4BApi $api)
+    {
+        $this->id = self::requireId($fields);
+        $this->api = $api;
+    }
 
-	/**
-	 * @param $id
-	 * @param X4BApi $api
-	 * @return Lease
-	 */
-	static function fromId($id, X4BApi $api){
-		return new static(array('id'=>$id), $api);
-	}
+    /**
+     * @return list<Port>
+     */
+    public function getPorts(): array
+    {
+        $records = $this->api->module_port()->all(['lease' => $this->id]);
+        $ports = [];
+
+        if (!is_array($records)) {
+            return $ports;
+        }
+
+        foreach ($records as $record) {
+            if (is_array($record) && isset($record['id']) && (is_int($record['id']) || is_string($record['id']))) {
+                $ports[] = Port::fromId($record['id'], $this->api);
+            }
+        }
+
+        return $ports;
+    }
+
+    public static function fromId(int|string $id, X4BApi $api): self
+    {
+        return new self(['id' => $id], $api);
+    }
+
+    /**
+     * @param array{id: int|string} $fields
+     */
+    private static function requireId(array $fields): int|string
+    {
+        return $fields['id'];
+    }
 }

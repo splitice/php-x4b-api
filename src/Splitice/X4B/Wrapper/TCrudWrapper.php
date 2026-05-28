@@ -1,36 +1,69 @@
 <?php
-namespace Splitice\X4B\Wrapper;
 
+namespace Splitice\X4B\Wrapper;
 
 use Splitice\X4B\Modules\Base\CrudApiModule;
 
 trait TCrudWrapper
 {
-	/**
-	 * @return CrudApiModule
-	 */
-	abstract protected function moduleApi();
-	abstract protected function moduleDataFilter($function, &$data);
-	abstract protected function getApiValue();
-	abstract protected function getApiQuery();
+    abstract protected function moduleApi(): CrudApiModule;
 
-	function insert($data = array()){
-		$this->moduleDataFilter(__FUNCTION__, $data);
-		$this->moduleApi()->insert($this->getApiValue(), $data);
-	}
+    /**
+     * @param array<string, mixed> $data
+     */
+    abstract protected function moduleDataFilter(array &$data): void;
 
-	function delete($data = array()){
-		$this->moduleDataFilter(__FUNCTION__, $data);
-		$this->moduleApi()->delete($this->getApiQuery(), $data);
-	}
+    /**
+     * @return array<string, mixed>
+     */
+    abstract protected function getApiValue(): array;
 
-	function update($data = array()){
-		$this->moduleDataFilter(__FUNCTION__, $data);
-		$this->moduleApi()->update($this->getApiQuery(), $this->getApiValue(), $data);
-	}
+    /**
+     * @return array<string, mixed>
+     */
+    abstract protected function getApiQuery(): array;
 
-	function get($data = array()){
-		$this->moduleDataFilter(__FUNCTION__, $data);
-		$this->moduleApi()->get($this->getApiQuery(), $data);
-	}
+    /**
+     * @param array<string, mixed> $data
+     * @return mixed
+     */
+    public function insert(array $data = []): mixed
+    {
+        $this->moduleDataFilter($data);
+
+        return $this->moduleApi()->insert($this->getApiValue(), $data);
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     * @return mixed
+     */
+    public function delete(array $data = []): mixed
+    {
+        $this->moduleDataFilter($data);
+
+        return $this->moduleApi()->delete($this->getApiQuery(), $data);
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     * @return mixed
+     */
+    public function update(array $data = []): mixed
+    {
+        $this->moduleDataFilter($data);
+
+        return $this->moduleApi()->update($this->getApiQuery(), $this->getApiValue(), $data);
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     * @return mixed
+     */
+    public function get(array $data = []): mixed
+    {
+        $this->moduleDataFilter($data);
+
+        return $this->moduleApi()->get($this->getApiQuery(), $data);
+    }
 }

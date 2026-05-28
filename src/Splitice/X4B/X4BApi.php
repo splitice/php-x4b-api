@@ -1,47 +1,45 @@
 <?php
+
 namespace Splitice\X4B;
 
+use Splitice\X4B\Authorization\IX4BApiAuthorization;
+use Splitice\X4B\Authorization\UsernameAuthorization;
+use Splitice\X4B\Client\IX4BApiClient;
+use Splitice\X4B\Client\X4BApiClient;
+use Splitice\X4B\Modules\AclApiModule;
+use Splitice\X4B\Modules\PortApiModule;
 
 class X4BApi
 {
-	/**
-	 * @var Client\IX4BApiClient
-	 */
-	private $api;
+    private IX4BApiClient $api;
 
-	/**
-	 * @var Authorization\IX4BApiAuthorization
-	 */
-	private $auth;
+    private ?IX4BApiAuthorization $auth = null;
 
-	public function __construct(Client\IX4BApiClient $api = null)
-	{
-		if($api === null){
-			$api = new Client\X4BApiClient();
-		}
-		$this->api = $api;
-	}
+    public function __construct(?IX4BApiClient $api = null)
+    {
+        $this->api = $api ?? new X4BApiClient();
+    }
 
-	public function auth_login($username, $password){
-		$this->auth = new Authorization\UsernameAuthorization($username,$password);
-	}
+    public function auth_login(string $username, string $password): void
+    {
+        $this->auth = new UsernameAuthorization($username, $password);
+    }
 
-	public function auth_key(){
-		/* todo */
-	}
+    public function auth_key(): void
+    {
+        /* todo */
+    }
 
-	/**
-	 * @return Modules\PortApiModule
-	 */
-	public function module_port(){
-		return new Modules\PortApiModule($this->api, $this->auth);
-	}
+    public function module_port(): PortApiModule
+    {
+        return new PortApiModule($this->api, $this->auth);
+    }
 
-	/**
-	 * @param string $target either http or droplist (TCP/UDP ports)
-	 * @return Modules\AclApiModule
-	 */
-	public function module_acl($target){
-		return new Modules\AclApiModule($this->api, $this->auth, $target);
-	}
+    /**
+     * @param string $target Either http or droplist (TCP/UDP ports).
+     */
+    public function module_acl(string $target): AclApiModule
+    {
+        return new AclApiModule($this->api, $this->auth, $target);
+    }
 }

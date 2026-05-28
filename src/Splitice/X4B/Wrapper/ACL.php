@@ -1,58 +1,79 @@
 <?php
+
 namespace Splitice\X4B\Wrapper;
 
-
+use Splitice\X4B\Modules\AclApiModule;
 use Splitice\X4B\X4BApi;
 
 class ACL
 {
-	use TCrudWrapper;
+    use TCrudWrapper;
 
-	private $id;
-	/**
-	 * @var X4BApi
-	 */
-	private $api;
-	private $target;
+    private int|string $id;
 
-	public function __construct($fields, X4BApi $api, $target)
-	{
-		$this->id = $fields['id'];
-		$this->target = $target;
-		$this->api = $api;
-	}
+    private X4BApi $api;
 
-	/**
-	 * @return \Splitice\X4B\Modules\AclApiModule
-	 */
-	protected function moduleApi(){
-		return $this->api->module_acl($this->target);
-	}
-	protected function moduleDataFilter($function, &$data){
-		$data['acl_type'] = $this->target;
-	}
-	protected function getApiValue(){
-		return array();
-	}
-	protected function getApiQuery(){
-		return array('id'=>$this->id);
-	}
+    private string $target;
 
-	public function moveUp(){
-		return $this->moduleApi()->moveUp(array('id'=>$this->id));
-	}
+    /**
+     * @param array{id: int|string} $fields
+     */
+    public function __construct(array $fields, X4BApi $api, string $target)
+    {
+        $this->id = self::requireId($fields);
+        $this->target = $target;
+        $this->api = $api;
+    }
 
-	public function moveDown(){
-		return $this->moduleApi()->moveDown(array('id'=>$this->id));
-	}
+    protected function moduleApi(): AclApiModule
+    {
+        return $this->api->module_acl($this->target);
+    }
 
-	/**
-	 * @param $id
-	 * @param X4BApi $api
-	 * @param $target
-	 * @return ACL
-	 */
-	static function fromId($id, X4BApi $api, $target){
-		return new static(array('id'=>$id), $api, $target);
-	}
+    /**
+     * @param array<string, mixed> $data
+     */
+    protected function moduleDataFilter(array &$data): void
+    {
+        $data['acl_type'] = $this->target;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    protected function getApiValue(): array
+    {
+        return [];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    protected function getApiQuery(): array
+    {
+        return ['id' => $this->id];
+    }
+
+    public function moveUp(): mixed
+    {
+        return $this->moduleApi()->moveUp(['id' => $this->id]);
+    }
+
+    public function moveDown(): mixed
+    {
+        return $this->moduleApi()->moveDown(['id' => $this->id]);
+    }
+
+    public static function fromId(int|string $id, X4BApi $api, string $target): self
+    {
+        return new self(['id' => $id], $api, $target);
+    }
+
+    /**
+     * @param array{id: int|string} $fields
+     */
+    private static function requireId(array $fields): int|string
+    {
+        return $fields['id'];
+    }
 }

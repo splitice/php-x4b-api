@@ -1,46 +1,61 @@
 <?php
-namespace Splitice\X4B\Wrapper;
 
+namespace Splitice\X4B\Wrapper;
 
 use Splitice\X4B\X4BApi;
 
 class Port
 {
-	private $id;
-	/**
-	 * @var X4BApi
-	 */
-	private $api;
+    private int|string $id;
 
-	public function __construct($fields, X4BApi $api)
-	{
-		$this->id = $fields['id'];
-		$this->api = $api;
-	}
+    private X4BApi $api;
 
-	public function getAclType(){
-		return 'http';
-	}
+    /**
+     * @param array{id: int|string} $fields
+     */
+    public function __construct(array $fields, X4BApi $api)
+    {
+        $this->id = self::requireId($fields);
+        $this->api = $api;
+    }
 
-	/**
-	 * @return ACL[]
-	 */
-	function getACLs(){
-		$ret = array();
-		$target = $this->getAclType();
-		$module = $this->api->module_acl($target);
-		foreach($module->all(array('port'=>$this->id)) as $module){
-			$ret[] = new ACL($module, $this->api, $target);
-		}
-		return $ret;
-	}
+    public function getAclType(): string
+    {
+        return 'http';
+    }
 
-	/**
-	 * @param $id
-	 * @param X4BApi $api
-	 * @return Port
-	 */
-	static function fromId($id, X4BApi $api){
-		return new static(array('id'=>$id), $api);
-	}
+    /**
+     * @return list<ACL>
+     */
+    public function getACLs(): array
+    {
+        $target = $this->getAclType();
+        $records = $this->api->module_acl($target)->all(['port' => $this->id]);
+        $acls = [];
+
+        if (!is_array($records)) {
+            return $acls;
+        }
+
+        foreach ($records as $record) {
+            if (is_array($record) && isset($record['id']) && (is_int($record['id']) || is_string($record['id']))) {
+                $acls[] = ACL::fromId($record['id'], $this->api, $target);
+            }
+        }
+
+        return $acls;
+    }
+
+    public static function fromId(int|string $id, X4BApi $api): self
+    {
+        return new self(['id' => $id], $api);
+    }
+
+    /**
+     * @param array{id: int|string} $fields
+     */
+    private static function requireId(array $fields): int|string
+    {
+        return $fields['id'];
+    }
 }

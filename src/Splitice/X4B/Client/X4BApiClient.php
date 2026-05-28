@@ -1,55 +1,72 @@
 <?php
+
 namespace Splitice\X4B\Client;
+
 use Splitice\X4B\Exceptions\ApiTransportException;
 
 /**
  * X4B APIv2 Client using JSON encoding
- * @package Splitice\X4B
  */
 class X4BApiClient implements IX4BApiClient
 {
-    const URL = "https://www.x4b.net/apiv2/";
-    private $ch;
-    private $url;
+    public const URL = 'https://www.x4b.net/apiv2/';
 
-    function __construct($url = self::URL){
+    private \CurlHandle $ch;
+
+    /** @var non-empty-string */
+    private string $url;
+
+    /**
+     * @param non-empty-string $url
+     */
+    public function __construct(string $url = self::URL)
+    {
         $this->url = $url;
-
-        //Setup curl
         $this->ch = curl_init();
+
         curl_setopt($this->ch, CURLOPT_POST, true);
         curl_setopt($this->ch, CURLOPT_TIMEOUT, 30);
-        curl_setopt($this->ch, CURLOPT_FRESH_CONNECT, 1);
+        curl_setopt($this->ch, CURLOPT_FRESH_CONNECT, true);
         curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($this->ch, CURLOPT_HEADER, 0);
-        curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($this->ch, CURLOPT_HEADER, false);
+        curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($this->ch, CURLOPT_AUTOREFERER, true);
-        curl_setopt($this->ch, CURLOPT_USERAGENT, "x4b-api-client");
+        curl_setopt($this->ch, CURLOPT_USERAGENT, 'x4b-api-client');
     }
 
-    private function build_url($module, $method){
-        return rtrim($this->url,'/').'/'.$module.'/'.$method;
+    /**
+     * @return non-empty-string
+     */
+    private function build_url(string $module, string $method): string
+    {
+        return rtrim($this->url, '/') . '/' . $module . '/' . $method;
     }
 
-    function __destruct(){
-        curl_close($this->ch);
-    }
-
-    public function execute($module,$action, $data = array()){
-        //set curl
+    /**
+     * @param array<string, mixed> $data
+     * @return mixed
+     */
+    public function execute(string $module, string $action, array $data = []): mixed
+    {
         curl_setopt($this->ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($this->ch, CURLOPT_URL, $this->build_url($module, $action));
 
-        //Execute request
-        $data = curl_exec($this->ch);
+        $response = curl_exec($this->ch);
         $code = curl_getinfo($this->ch, CURLINFO_HTTP_CODE);
 
-        //Handle response
-        if($code == 200){
-            return json_decode($data, true);
-        }else{
+        if ($response === false) {
+            throw new ApiTransportException(0, curl_error($this->ch));
+        }
+
+        if ($code !== 200) {
             throw new ApiTransportException($code);
         }
+
+        if (!is_string($response)) {
+            throw new ApiTransportException(0, 'Unexpected non-string response from cURL.');
+        }
+
+        return json_decode($response, true);
     }
 }

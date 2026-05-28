@@ -1,30 +1,42 @@
 <?php
-namespace Splitice\X4B\Authorization;
 
+namespace Splitice\X4B\Authorization;
 
 use Splitice\X4B\Client\IX4BApiClient;
 use Splitice\X4B\Exceptions\ApiAuthorizationException;
 
 class UsernameAuthorization implements IX4BApiAuthorization
 {
-	private $email;
-	private $password;
-	private $logged_in = false;
+    private string $email;
 
-	function __construct($email, $password)
-	{
-		$this->email = $email;
-		$this->password = $password;
-	}
+    private string $password;
 
-	public function perform(IX4BApiClient $api, &$data)
-	{
-		if(!$this->logged_in) {
-			$resp = $api->execute('User','login',array('email'=>$this->email,'password'=>$this->password));
-			if(!$resp || $resp['status'] != 'ok'){
-				throw new ApiAuthorizationException();
-			}
-			$this->logged_in = true;
-		}
-	}
+    private bool $logged_in = false;
+
+    public function __construct(string $email, string $password)
+    {
+        $this->email = $email;
+        $this->password = $password;
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public function perform(IX4BApiClient $api, array &$data): void
+    {
+        if ($this->logged_in) {
+            return;
+        }
+
+        $response = $api->execute('User', 'login', [
+            'email' => $this->email,
+            'password' => $this->password,
+        ]);
+
+        if (!is_array($response) || ($response['status'] ?? null) !== 'ok') {
+            throw new ApiAuthorizationException('Unable to authenticate against the X4B API.');
+        }
+
+        $this->logged_in = true;
+    }
 }
