@@ -76,6 +76,7 @@ function build_transport_request(string $path): array
     }
 
     return [
+        'authorization' => $_SERVER['HTTP_AUTHORIZATION'] ?? null,
         'method' => $requestMethod,
         'path' => $path,
         'post' => normalize_request_map($_POST),
@@ -111,6 +112,11 @@ if (is_string($statePath)) {
 }
 
 switch ($path) {
+    case '/apiv2/Test/forbidden':
+        http_response_code(403);
+        header('Content-Type: application/json');
+        echo json_encode(['error' => 'Not Logged In']);
+        return;
     case '/apiv2/Test/non200':
         http_response_code(418);
         header('Content-Type: application/json');
@@ -127,6 +133,7 @@ switch ($path) {
 
 header('Content-Type: application/json');
 echo json_encode([
+    'authorization' => $_SERVER['HTTP_AUTHORIZATION'] ?? null,
     'path' => $path,
     'method' => $_SERVER['REQUEST_METHOD'] ?? 'GET',
     'post' => $_POST,

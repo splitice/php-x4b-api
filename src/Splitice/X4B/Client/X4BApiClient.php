@@ -5,7 +5,7 @@ namespace Splitice\X4B\Client;
 use Splitice\X4B\Exceptions\ApiTransportException;
 
 /**
- * X4B APIv2 Client using JSON encoding
+ * X4B APIv2 client posting form data and decoding JSON responses.
  */
 class X4BApiClient implements IX4BApiClient
 {
@@ -18,9 +18,13 @@ class X4BApiClient implements IX4BApiClient
 
     /**
      * @param non-empty-string $url
+     * @param string|null $apiKeyAuthorizationScheme Bearer or Bearer api selects a header; null keeps POST data.
      */
-    public function __construct(string $url = self::URL)
+    public function __construct(string $url = self::URL, private readonly ?string $apiKeyAuthorizationScheme = null)
     {
+        if (!in_array($apiKeyAuthorizationScheme, [null, 'Bearer', 'Bearer api'], true)) {
+            throw new \InvalidArgumentException('API key authorization scheme must be Bearer, Bearer api, or null.');
+        }
         $this->url = $url;
         $this->ch = curl_init();
 
@@ -50,6 +54,17 @@ class X4BApiClient implements IX4BApiClient
      */
     public function execute(string $module, string $action, array $data = []): mixed
     {
+        $headers = [];
+        if ($this->apiKeyAuthorizationScheme !== null && array_key_exists('API_KEY', $data)) {
+            $key = $data['API_KEY'];
+            if (!is_string($key) || strpbrk($key, "\r\n") !== false) {
+                throw new \InvalidArgumentException('An API key must be a string without line breaks.');
+            }
+            $headers[] = 'Authorization: ' . $this->apiKeyAuthorizationScheme . ' ' . $key;
+            unset($data['API_KEY']);
+        }
+        // Reset this on every call so a reused handle never forwards an earlier key.
+        curl_setopt($this->ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($this->ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($this->ch, CURLOPT_URL, $this->build_url($module, $action));
 

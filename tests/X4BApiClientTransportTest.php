@@ -1,6 +1,8 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Splitice\X4B\X4BApi;
 use Splitice\X4B\Client\X4BApiClient;
 use Splitice\X4B\Exceptions\ApiTransportException;
 
@@ -36,6 +38,98 @@ final class X4BApiClientTransportTest extends TestCase
         self::assertSame('42', $response['post']['lease']);
         self::assertSame('test', $response['post']['mode']);
         self::assertStringContainsString('multipart/form-data', $response['content_type']);
+    }
+
+    /** @return iterable<string, array{?string}> Supported credential placements on the actual HTTP transport. */
+    public static function apiKeyTransports(): iterable
+    {
+        yield 'POST API_KEY' => [null];
+        yield 'Authorization Bearer' => ['Bearer'];
+        yield 'Authorization Bearer api' => ['Bearer api'];
+    }
+
+    /** auth_key() reaches HTTP unchanged, using exactly one credential location and no URL parameters. */
+    #[DataProvider('apiKeyTransports')]
+    public function testAuthKeyUsesSelectedHttpTransport(?string $scheme): void
+    {
+        $transport = new X4BApiClient($this->startServer()->getApiBaseUrl(), $scheme);
+        $api = new X4BApi($transport);
+        $api->auth_key('synthetic-api-key');
+        $response = $this->normalizeTransportResponse($api->module_user()->describe(['marker' => 'preserved']));
+        self::assertSame('/apiv2/User/describe', $response['path']);
+        self::assertSame('POST', $response['method']);
+        self::assertSame('preserved', $response['post']['marker']);
+        if ($scheme === null) {
+            self::assertSame('synthetic-api-key', $response['post']['API_KEY']);
+            self::assertSame('', $response['authorization']);
+        } else {
+            self::assertArrayNotHasKey('API_KEY', $response['post']);
+            self::assertSame($scheme . ' synthetic-api-key', $response['authorization']);
+        }
+        self::assertStringContainsString('multipart/form-data', $response['content_type']);
+    }
+
+    /** Sequential requests replace credentials and an anonymous call cannot reuse the preceding key. */
+    #[DataProvider('apiKeyTransports')]
+    public function testKeyReplacementAndAnonymousRequestIsolation(?string $scheme): void
+    {
+        $transport = new X4BApiClient($this->startServer()->getApiBaseUrl(), $scheme);
+        $api = new X4BApi($transport);
+        foreach (['first-key', 'replacement-key'] as $key) {
+            $api->auth_key($key);
+            $response = $this->normalizeTransportResponse($api->module_user()->describe());
+            self::assertSame($scheme === null ? '' : $scheme . ' ' . $key, $response['authorization']);
+            self::assertSame($scheme === null ? ['API_KEY' => $key] : [], $response['post']);
+        }
+        $anonymous = new X4BApi($transport);
+        $response = $this->normalizeTransportResponse($anonymous->module_user()->describe(['marker' => 'anonymous']));
+        self::assertSame('', $response['authorization']);
+        self::assertSame(['marker' => 'anonymous'], $response['post']);
+    }
+
+    /** Even a failed request must not leave its credential attached to the next anonymous request. */
+    #[DataProvider('apiKeyTransports')]
+    public function testFailedRequestDoesNotLeakCredentials(?string $scheme): void
+    {
+        $transport = new X4BApiClient($this->startServer()->getApiBaseUrl(), $scheme);
+        try {
+            $transport->execute('Test', 'non200', ['API_KEY' => 'failed-request-key']);
+            self::fail('The fixture must return HTTP 418.');
+        } catch (ApiTransportException $error) {
+            self::assertSame(418, $error->getHttpCode());
+        }
+        $response = $this->normalizeTransportResponse($transport->execute('User', 'describe', ['marker' => 'after-failure']));
+        self::assertSame('', $response['authorization']);
+        self::assertSame(['marker' => 'after-failure'], $response['post']);
+    }
+
+    /** Preserve the application's forbidden status for invalid or revoked keys with either credential placement. */
+    #[DataProvider('apiKeyTransports')]
+    public function testForbiddenResponsePreservesHttpStatus(?string $scheme): void
+    {
+        $transport = new X4BApiClient($this->startServer()->getApiBaseUrl(), $scheme);
+        try {
+            $transport->execute('Test', 'forbidden', ['API_KEY' => 'rejected-synthetic-key']);
+            self::fail('The fixture must return HTTP 403.');
+        } catch (ApiTransportException $error) {
+            self::assertSame(403, $error->getHttpCode());
+            self::assertSame(403, $error->getCode());
+        }
+    }
+
+    /** Reject line breaks before a credential can inject another HTTP header. */
+    public function testHeaderKeyCannotInjectHeaders(): void
+    {
+        $transport = new X4BApiClient($this->startServer()->getApiBaseUrl(), 'Bearer');
+        $this->expectException(InvalidArgumentException::class);
+        $transport->execute('User', 'describe', ['API_KEY' => "synthetic-key\r\nX-Injected: yes"]);
+    }
+
+    /** Invalid scheme names cannot silently change authentication semantics. */
+    public function testUnsupportedHeaderSchemeIsRejected(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        (new X4BApiClient($this->startServer()->getApiBaseUrl(), 'Basic'))->execute('User', 'describe');
     }
 
     /**
@@ -149,6 +243,7 @@ final class X4BApiClientTransportTest extends TestCase
     /**
      * @param mixed $response
      * @return array{
+     *     authorization: string,
      *     path: string,
      *     method: string,
      *     post: array<string, string>,
@@ -165,6 +260,7 @@ final class X4BApiClientTransportTest extends TestCase
         }
 
         return [
+            'authorization' => $this->scalarToString($response['authorization'] ?? ''),
             'path' => $this->scalarToString($response['path'] ?? ''),
             'method' => $this->scalarToString($response['method'] ?? ''),
             'post' => $this->normalizeStringMap($response['post'] ?? []),
