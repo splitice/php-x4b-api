@@ -54,6 +54,76 @@ class UserApiModule extends Base\ApiModuleClient
     }
 
     /**
+     * Execute the documented account passkey action.
+     * @param array<string, mixed> $data Action parameters.
+     * @return mixed
+     */
+    public function passkey_register_begin(array $data = []): mixed
+    {
+        return $this->api_execute(__FUNCTION__, $data);
+    }
+
+    /**
+     * Execute the documented account passkey action.
+     * @param array<string, mixed> $data Action parameters.
+     * @return mixed
+     */
+    public function passkey_register_finish(array $data = []): mixed
+    {
+        return $this->api_execute(__FUNCTION__, $data);
+    }
+
+    /**
+     * Execute the documented account passkey action.
+     * @param array<string, mixed> $data Action parameters.
+     * @return mixed
+     */
+    public function passkey_auth_options(array $data = []): mixed
+    {
+        return $this->api_execute(__FUNCTION__, $data);
+    }
+
+    /**
+     * Execute the documented account passkey action.
+     * @param array<string, mixed> $data Action parameters.
+     * @return mixed
+     */
+    public function passkey_auth_begin(array $data = []): mixed
+    {
+        return $this->api_execute(__FUNCTION__, $data);
+    }
+
+    /**
+     * Execute the documented account passkey action.
+     * @param array<string, mixed> $data Action parameters.
+     * @return mixed
+     */
+    public function passkey_auth_finish(array $data = []): mixed
+    {
+        return $this->api_execute(__FUNCTION__, $data);
+    }
+
+    /**
+     * Execute the documented account passkey action.
+     * @param array<string, mixed> $data Action parameters.
+     * @return mixed
+     */
+    public function passkey_delete(array $data = []): mixed
+    {
+        return $this->api_execute(__FUNCTION__, $data);
+    }
+
+    /**
+     * Execute the documented account passkey action.
+     * @param array<string, mixed> $data Action parameters.
+     * @return mixed
+     */
+    public function passkey_update_policy(array $data = []): mixed
+    {
+        return $this->api_execute(__FUNCTION__, $data);
+    }
+
+    /**
      * Get the API module name.
      */
     protected function module_name(): string

@@ -29,6 +29,17 @@ class Layer4RuleApiModule extends Base\CrudApiModule
     }
 
     /**
+     * Return authorized per-rule packet counts for the selected LeaseIP.
+     * @param array<string, mixed> $selector
+     * @param array<string, mixed> $data
+     * @return mixed
+     */
+    public function hits(array $selector, array $data = []): mixed
+    {
+        return $this->api_execute_query(__FUNCTION__, $selector, $data);
+    }
+
+    /**
      * Get the API module name.
      */
     protected function module_name(): string

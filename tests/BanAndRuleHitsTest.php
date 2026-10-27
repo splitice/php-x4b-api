@@ -35,4 +35,26 @@ final class BanAndRuleHitsTest extends TestCase
             ['Layer7Rule', 'hits', ['query' => ['port' => 7], 'API_KEY' => 'fixture-key']],
         ], $requests);
     }
+    /** Every added telemetry and passkey action preserves its request fields and credentials. */
+    public function testAdditionalCustomerActionContracts(): void
+    {
+        $client = $this->createMock(IX4BApiClient::class);
+        $client->expects(self::exactly(11))->method('execute')->willReturnCallback(
+            static fn (string $module, string $action, array $data): array => [$module, $action, $data]
+        );
+        $api = new X4BApi($client);
+        $api->auth_key('fixture-key');
+        foreach (['passkey_register_begin', 'passkey_register_finish', 'passkey_auth_options',
+            'passkey_auth_begin', 'passkey_auth_finish', 'passkey_delete', 'passkey_update_policy'] as $action) {
+            self::assertSame(['User', $action, ['id' => 'example', 'API_KEY' => 'fixture-key']],
+                $api->module_user()->{$action}(['id' => 'example']));
+        }
+        foreach (['summary', 'graph', 'describe'] as $action) {
+            self::assertSame(['HttpLogs', $action, ['lease_id' => 42, 'API_KEY' => 'fixture-key']],
+                $api->module_http_logs()->{$action}(['lease_id' => 42]));
+        }
+        self::assertSame(['Layer4Rule', 'hits', ['query' => ['lip' => 42], 'API_KEY' => 'fixture-key']],
+            $api->module_layer4_rule()->hits(['lip' => 42]));
+    }
+
 }

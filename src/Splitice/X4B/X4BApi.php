@@ -13,6 +13,7 @@ use Splitice\X4B\Modules\DnsZoneApiModule;
 use Splitice\X4B\Modules\ErrorPageApiModule;
 use Splitice\X4B\Modules\FirewallProfileApiModule;
 use Splitice\X4B\Modules\HttpOptionApiModule;
+use Splitice\X4B\Modules\HttpLogsApiModule;
 use Splitice\X4B\Modules\L7ListApiModule;
 use Splitice\X4B\Modules\L4BansApiModule;
 use Splitice\X4B\Modules\Layer4RuleApiModule;
@@ -86,6 +87,12 @@ class X4BApi
     public function module_firewall_profile(): FirewallProfileApiModule
     {
         return new FirewallProfileApiModule($this->api, $this->auth);
+    }
+
+    /** Return the HTTP telemetry API. */
+    public function module_http_logs(): HttpLogsApiModule
+    {
+        return new HttpLogsApiModule($this->api, $this->auth);
     }
 
     public function module_http_option(): HttpOptionApiModule
