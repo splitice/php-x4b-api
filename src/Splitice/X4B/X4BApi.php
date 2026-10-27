@@ -14,6 +14,7 @@ use Splitice\X4B\Modules\ErrorPageApiModule;
 use Splitice\X4B\Modules\FirewallProfileApiModule;
 use Splitice\X4B\Modules\HttpOptionApiModule;
 use Splitice\X4B\Modules\L7ListApiModule;
+use Splitice\X4B\Modules\L4BansApiModule;
 use Splitice\X4B\Modules\Layer4RuleApiModule;
 use Splitice\X4B\Modules\Layer7RuleApiModule;
 use Splitice\X4B\Modules\LeaseApiModule;
@@ -90,6 +91,12 @@ class X4BApi
     public function module_http_option(): HttpOptionApiModule
     {
         return new HttpOptionApiModule($this->api, $this->auth);
+    }
+
+    /** Return the customer Layer 4 ban API. */
+    public function module_l4_bans(): L4BansApiModule
+    {
+        return new L4BansApiModule($this->api, $this->auth);
     }
 
     public function module_l7_list(): L7ListApiModule
